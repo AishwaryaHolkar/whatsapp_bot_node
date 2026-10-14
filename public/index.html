@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WhatsApp AI Chatbot</title>
+  <style>
+    :root { --green:#25D366; --dark:#075E54; --bg:#f4f7f6; --card:#fff; --text:#1f2a2e; --muted:#5b6b70; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; background:var(--bg); color:var(--text); line-height:1.55; }
+    header { background:var(--dark); color:#fff; padding:40px 16px; text-align:center; }
+    header h1 { margin:0 0 8px; font-size:clamp(1.6rem,4vw,2.4rem); }
+    header p { margin:0; opacity:.85; }
+    main { max-width:960px; margin:0 auto; padding:24px 16px 48px; }
+    .card { background:var(--card); border-radius:14px; padding:24px; margin-bottom:20px; box-shadow:0 2px 10px rgba(0,0,0,.06); }
+    h2 { margin-top:0; color:var(--dark); }
+    .qr-wrap { display:flex; gap:28px; align-items:center; flex-wrap:wrap; }
+    .qr-wrap img { width:220px; height:220px; border-radius:10px; border:6px solid #fff; box-shadow:0 0 0 2px var(--green); }
+    .btn { display:inline-block; background:var(--green); color:#fff; padding:12px 22px; border-radius:30px; text-decoration:none; font-weight:600; margin-top:10px; }
+    .steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; }
+    .step { background:var(--bg); border-radius:10px; padding:16px; border-left:4px solid var(--green); }
+    .step b { display:block; margin-bottom:4px; }
+    .flow { font-family:ui-monospace,Menlo,monospace; background:#0f1c1f; color:#c8f7d8; padding:16px; border-radius:10px; overflow-x:auto; font-size:.9rem; }
+    ul { padding-left:20px; }
+    .muted { color:var(--muted); font-size:.92rem; }
+    footer { text-align:center; color:var(--muted); font-size:.85rem; padding:20px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🤖 WhatsApp AI Chatbot</h1>
+    <p>Chat with our AI assistant directly on WhatsApp</p>
+  </header>
+
+  <main>
+    <!-- QR code: values are filled in by server.js -->
+    <section class="card">
+      <h2>Start chatting</h2>
+      <div class="qr-wrap">
+        <img src="{{QR_CODE}}" alt="QR code to open WhatsApp chat" />
+        <div>
+          <p>Scan this QR code with your phone camera. WhatsApp opens a chat with our business number:</p>
+          <p><strong>{{BUSINESS_NUMBER}}</strong></p>
+          <a class="btn" href="{{WHATSAPP_LINK}}" target="_blank" rel="noopener">Open WhatsApp</a>
+          <p class="muted">Send any text message, like “Hi”, and the AI will reply in a few seconds.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>How it works</h2>
+      <div class="steps">
+        <div class="step"><b>1. You send a message</b>You type a question in WhatsApp to our business number.</div>
+        <div class="step"><b>2. Meta forwards it</b>WhatsApp (Meta Cloud API) sends the message to our server's webhook.</div>
+        <div class="step"><b>3. Security check</b>The server checks that the request really came from Meta.</div>
+        <div class="step"><b>4. AI thinks</b>The message and recent chat history go to the AI model ({{MODEL}}).</div>
+        <div class="step"><b>5. You get a reply</b>The server sends the AI answer back to your WhatsApp.</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Message flow</h2>
+      <div class="flow">
+Your phone → WhatsApp → Meta Cloud API → POST /webhook (our server)<br>
+&nbsp;&nbsp;→ verify signature → reply 200 OK to Meta<br>
+&nbsp;&nbsp;→ OpenAI ({{MODEL}}) → Meta Graph API → Your phone
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Good to know</h2>
+      <ul>
+        <li>The bot reads <strong>text messages only</strong>. For images or voice notes, it replies politely asking for text.</li>
+        <li>It remembers the last few messages, so you can ask follow-up questions.</li>
+        <li>Replies usually arrive within a few seconds.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>Powered by WhatsApp Cloud API &amp; OpenAI</footer>
+</body>
+</html>
