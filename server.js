@@ -222,6 +222,14 @@ async function sendWhatsAppText(to, text) {
   }
 }
 
+
+// DEBUG: log every request so we can see exactly what Meta sends and what we answer
+app.use((req, res, next) => {
+  res.on("finish", () =>
+    console.log(`➡️ ${req.method} ${req.originalUrl} → ${res.statusCode} | UA: ${req.headers["user-agent"]}`)
+  );
+  next();
+});
 // ----------------------------------------------------------------------------
 // 4. START SERVER
 // On Vercel, Vercel runs the app itself (process.env.VERCEL is set) — no listen().
